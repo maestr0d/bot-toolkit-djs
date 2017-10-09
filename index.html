@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bot Toolkit</title>
+  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <script src="bootstrap/js/ie-emulation-modes-warning.js"></script>
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="balloon.css">
+</head>
+<body>
+  <div class="loading-screen" id="loading-screen">
+    <div class="load-container"><div class="load-spin"></div></div>
+  </div>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand">Bot Toolkit v0.0.11</a>
+        <div class="dropdown navdown">
+          <span>File</span>
+          <div class="dropdown-content">
+            <p id="loadconf">Load</p>
+            <p id="saveconf">Save</p>
+            <label for="upload">Import
+              <input type="file" id="upload" style="display:none">
+            </label>
+            <a class="cleana" href="./jsondata/config.json" id="export-btn" download>Export</a>
+          </div>
+        </div>
+
+        <div class="dropdown navdown" id="about-page">
+          <span>About</span>
+        </div>
+        <span class="label label-success navlabel pull-left">New!</span>
+        <!--
+        <div class="dropdown navdown">
+          <span>Help</span>
+          <div class="dropdown-content">
+            <p>About</p>
+          </div>
+        </div>-->
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a id="min-btn"><span class="glyphicon glyphicon glyphicon-minus"></span></a></li>
+        <li><a id="max-btn"><span class="glyphicon glyphicon glyphicon-resize-full"></span></a></li>
+        <li><a id="close-btn"><span class="glyphicon glyphicon glyphicon-remove"></span></a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="mainBody">
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-success btn-block" id="status">Status</button>
+      <br>
+      <div class="panel panel-default">
+        <div class="panel-heading" id="botInfo">
+        <span class="glyphicon glyphicon glyphicon-user"></span>
+        &emsp;Bot info
+        <div class="pull-right" data-balloon="These features are rate limited by the library. Use them sparingly!" data-balloon-pos="right">
+          <span class="glyphicon glyphicon glyphicon-question-sign"></span>
+        </div>
+      </div>
+        <div class="panel-body" id="settingPanel" style="display:none;">
+          <input type="text" class="form-control" placeholder="Username" name="botname" id="botname">
+          <br>
+          <input type="file" id="botPic" class="form-control" disabled>
+          <br>
+          <select class="form-control" id="botstatus">
+            <option value="online">Online</option>
+            <option value="idle">Idle</option>
+            <option value="dnd">Do not disturb</option>
+            <option value="invisible">Invisible</option>
+          </select>
+          <br>
+          <input type="text" class="form-control" placeholder="Game playing" name="botgame" id="botgame">
+          <br>
+          <button type="button" class="btn btn-default btn-block" id="setSettings">Save changes</button>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon glyphicon-cloud-upload"></span>
+          &emsp;Invite bot to a server
+          <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#invitePanel" style="display:none;"></span>
+        </div>
+        <div class="panel-body" id="invitePanel" style="display:none;">
+          <input type="text" class="form-control" placeholder="Bot id" name="botid" id="botid">
+          <br>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Perms (optional)" name="perms" id="perms">
+            <span class="input-group-addon" id="redirPerms" data-balloon="Permission calculator" data-balloon-pos="right">
+              <span class="glyphicon glyphicon glyphicon-link"></span>
+            </span>
+          </div>
+          <br>
+          <button type="button" class="btn btn-default btn-block" id="invite">Invite</button>
+          <br>
+          <button type="button" class="btn btn-default btn-block" id="inviteLink">Copy invite link</button>
+        </div>
+      </div>
+      <div class="panel panel-default" id="changelog-data">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon glyphicon-list-alt"></span>
+          &emsp;Changelog
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-8">
+      <div class="clearfix">
+          <span class="tokenContainer">
+            <input type="text" class="form-control tokenInp pull-left" placeholder="Bot token" name="token" id="token">
+          </span>
+          <span class="tokenButtons">
+            <button id="logout" class="btn btn-warning pull-right">Logout</button>
+            <button id="login" class="btn btn-primary pull-right">Login</button>
+          </span>
+      </div>
+      <br>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-envelope"></span>
+          &emsp;Send a message
+          <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#messagePanel" style="display:none;"></span>
+          <!--<span class="label label-warning pull-right">Updated!</span>-->
+        </div>
+        <div class="panel-body" id="messagePanel" style="display:none;">
+          <select class="form-control" id="message-to">
+            <option value="1">Channel</option>
+            <option value="2">User</option>
+          </select>
+          <br>
+          <div class="message-type" id="m-type1">
+            <input type="text" class="form-control" placeholder="Server name" name="server" id="server">
+            <br>
+            <input type="text" class="form-control" placeholder="Channel name" name="channel" id="channel">
+            <br>
+          </div>
+          <div class="message-type" id="m-type2">
+            <input type="text" class="form-control" placeholder="User id" name="dmid" id="dmid">
+            <br>
+          </div>
+          <textarea class="form-control richArea" id="msg" placeholder="Message"></textarea>
+          <br>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default" id="formatBold" data-balloon="Bold" data-balloon-pos="up">
+              <span class="glyphicon glyphicon-bold"></span>
+            </button>
+            <button type="button" class="btn btn-default" id="formatItalic" data-balloon="Italic" data-balloon-pos="up">
+              <span class="glyphicon glyphicon-italic"></span>
+            </button>
+            <button type="button" class="btn btn-default" id="formatUnderline" data-balloon="Underlined" data-balloon-pos="up">
+              <span class="glyphicon glyphicon-text-color"></span>
+            </button>
+            <button type="button" class="btn btn-default" id="formatStrike" data-balloon="Strikethrough" data-balloon-pos="up">
+              <span class="glyphicon glyphicon-eur"></span>
+            </button>
+            <button type="button" class="btn btn-default" id="olBox" data-balloon="Code block" data-balloon-pos="up">
+              <span class="glyphicon glyphicon-text-background"></span>
+            </button>
+            <button type="button" class="btn btn-default" id="formatBox" data-balloon="Multiline code block" data-balloon-pos="up">
+              <span class="glyphicon glyphicon-unchecked"></span>
+            </button>
+            <button type="button" class="btn btn-default" id="mentionuser" data-balloon="Mention user" data-balloon-pos="up">
+              <span class="atmention">@</span>
+            </button>
+          </div>
+          <button class="btn btn-primary pull-right" id="sendmsg">Send!</button>
+          <button class="btn btn-default pull-right rightpad" id="savepres" data-balloon="Save to preset" data-balloon-pos="up">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+          </button>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-book"></span>
+          &emsp;Message presets
+          <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#presetPanel" style="display:none;"></span>
+          <!--<span class="label label-danger pull-right">New!</span>-->
+        </div>
+        <div class="panel-body" id="presetPanel" style="display:none;">
+          <div id="presetcontainer"></div>
+          <button class="btn btn-block" id="addpreset">Add new preset</button>
+        </div>
+      </div>
+      <!---
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-exclamation-sign"></span>
+          &emsp;Events
+          <span class="label label-warning pull-right">wip</span>
+        </div>
+        <div class="panel-body" id="eventPanel" style="display:none;">
+          <div id="eventcontainer"></div>
+
+
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">On message</h3>
+            </div>
+            <textarea class="panel-body form-control panel-area" rows="5" id="onMsg"></textarea>
+          </div>
+
+
+
+
+
+          <button class="btn btn-block" id="addevent">Add new event</button>-
+          <div class="panel panel-info">
+            <div class="panel-heading">Event log</div>
+            <div class="panel-body" id="event-log">
+              <div class="alert alert-warning" role="alert">
+                This is a warning alert—check it out!
+              </div>
+              <div class="alert alert-warning" role="alert">
+                This is a warning alert—check it out!
+              </div>
+              <div class="alert alert-warning" role="alert">
+                This is a warning alert—check it out!
+              </div>
+              <div class="alert alert-warning" role="alert">
+                This is a warning alert—check it out!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+-->
+
+
+      <div class="panel panel-default panel-console">
+        <div class="panel-body" id="consoleoutput"></div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <!--PROMPTS"-->
+  <div id="mentionprompt" style="display:none;" data-prompt="mentionid">
+    <div class="well prompt">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="User ID" id="mentionid">
+        <span class="input-group-btn">
+          <button class="btn btn-secondary" type="button" id="addmention">Add</button>
+        </span>
+      </div>
+      <span class="glyphicon glyphicon glyphicon-remove-sign dismissprompt" id="dismissmentionprompt"></span>
+    </div>
+    <div class="closebg" id="closementionbg"></div>
+  </div>
+  <div id="codeprompt" style="display:none;" data-prompt="codep">
+    <div class="well prompt">
+      <div class="input-group">
+        <select class="form-control" id="codetype">
+          <option value="" selected>Code type</option>
+          <option value="apache" >Apache</option>
+          <option value="bash" >Bash</option>
+          <option value="coffee" >CoffeeScript</option>
+          <option value="cpp" >C++</option>
+          <option value="cs" >C#</option>
+          <option value="css" >CSS</option>
+          <option value="diff" >Diff</option>
+          <option value="http" >HTTP</option>
+          <option value="ini" >Ini</option>
+          <option value="java" >Java</option>
+          <option value="js" >JavaScript</option>
+          <option value="json" >JSON</option>
+          <option value="makefile" >Makefile</option>
+          <option value="markdown" >Markdown</option>
+          <option value="nginx" >Nginx</option>
+          <option value="objc" >Objective-C</option>
+          <option value="perl" >Perl</option>
+          <option value="php" >PHP</option>
+          <option value="python" >Python</option>
+          <option value="ruby" >Ruby</option>
+          <option value="shell" >Shell Session</option>
+          <option value="sql" >SQL</option>
+          <option value="html" >HTML, XML</option>
+        </select>
+        <span class="input-group-btn">
+          <button class="btn btn-secondary" type="button" id="addcodep">Add</button>
+        </span>
+      </div>
+      <span class="glyphicon glyphicon glyphicon-remove-sign dismissprompt" id="dismisscodeprompt"></span>
+    </div>
+    <div class="closebg" id="closecodebg"></div>
+  </div>
+  <div id="changelogprompt" style="display:none;" data-prompt="changeloginfo">
+    <div class="well prompt">
+      <div class="changelogdiv">
+        <h4>0.0.11 Changelog:</h4>
+          <hr>
+          <ul>
+            <li>Added the ability to message users (You can only save presets for server messages for now. Next version will have support for DM preset saving and viewing DM replies)</li>
+            <li>Added multiline code picker prompt (Sending saved multiline code from presets will remove syntax highlighting)</li>
+            <li>Added new modular collapsible system</li>
+            <li>Moved footer credits to the About tab</li>
+            <li>Moved changelog side panel to it's own prompt for easier reading</li>
+            <li>TAB key now inserts an indent in the text area</li>
+            <li>Prompt values now reset when prompts are closed</li>
+            <li>Logging improvements</li>
+            <li>Code adjustments/optimizations</li>
+            <li>Quite a few CSS/HTML adjustments</li>
+          </ul> 
+      </div>
+      <span class="glyphicon glyphicon glyphicon-remove-sign dismissprompt" id="dismisschangelogprompt"></span>
+    </div>
+    <div class="closebg" id="closechangelogbg"></div>
+  </div>
+  <div id="aboutprompt" style="display:none;" data-prompt="aboutinfo">
+    <div class="well prompt">
+      <div class="aboutdiv">
+        &#169; slydoge, Bot Toolkit v0.0.11
+        <br>
+        <br>
+        Powered by <a href="https://nodejs.org/en/" class="text-a">Node.js</a>, 
+        <a href="https://electron.atom.io/" class="text-a">Electron</a>, 
+        <a href="https://discord.js.org/" class="text-a">Discord.js</a>, 
+        <a href="http://getbootstrap.com/" class="text-a">Bootstrap</a> and 
+        <a href="https://kazzkiq.github.io/balloon.css/" class="text-a">Balloon.css</a>
+        <hr>
+        Special thanks to alpha testers:
+        <br>
+        <br>
+        <ul>
+          <li>PiTiKi</li>
+          <li>K4oS</li>
+        </ul>
+        <hr>
+        <a data-balloon="Trello" data-balloon-pos="up" href="https://trello.com/b/nLa0eXAJ/discordjs-bot-toolkit"><img src="./img/trello.png" width="32px" height="32px"></a>
+        <a data-balloon="Discord" data-balloon-pos="up" href="https://discord.gg/Scd2Gtw"><img src="./img/discord.png" width="32px" height="32px"></a>
+        <a data-balloon="Github" data-balloon-pos="up" href="https://github.com/maestr0d/bot-toolkit-djs"><img src="./img/github.svg" width="32px" height="32px"></a>
+      </div>
+      <span class="glyphicon glyphicon glyphicon-remove-sign dismissprompt" id="dismissaboutprompt"></span>
+    </div>
+    <div class="closebg" id="closeaboutbg"></div>
+  </div>
+
+  <!--<div class="footer"></div>-->
+  <script src="default.js"></script>
+</body>
+</html>
