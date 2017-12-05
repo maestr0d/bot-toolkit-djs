@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bot Toolkit</title>
+  <title>Bot Toolkit v</title>
   <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <script src="bootstrap/js/ie-emulation-modes-warning.js"></script>
   <script src="bootstrap/js/bootstrap.min.js"></script>
@@ -12,12 +12,12 @@
 </head>
 <body>
   <div class="loading-screen" id="loading-screen">
-    <div class="load-container"><div class="load-spin"></div></div>
+    <div class="load-container"><div class="load-spin"></div><div id="load-log"></div></div>
   </div>
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand">Bot Toolkit v0.0.11</a>
+        <a class="navbar-brand" id="nav-brand"></a>
         <div class="dropdown navdown">
           <span>File</span>
           <div class="dropdown-content">
@@ -30,17 +30,19 @@
           </div>
         </div>
 
-        <div class="dropdown navdown" id="about-page">
-          <span>About</span>
-        </div>
-        <span class="label label-success navlabel pull-left">New!</span>
-        <!--
         <div class="dropdown navdown">
           <span>Help</span>
           <div class="dropdown-content">
-            <p>About</p>
+            <p id="how-to-use">User's guide</p>
+            <p id="changelog-data">Changelog</p>
+            <p id="about-page">About</p>
           </div>
-        </div>-->
+        </div>
+
+        <div class="dropdown navdown" id="refresh-app">
+          <span class="glyphicon glyphicon glyphicon-refresh"></span>
+        </div>
+
       </div>
       <ul class="nav navbar-nav navbar-right">
         <li><a id="min-btn"><span class="glyphicon glyphicon glyphicon-minus"></span></a></li>
@@ -57,14 +59,11 @@
         <div class="panel-heading" id="botInfo">
         <span class="glyphicon glyphicon glyphicon-user"></span>
         &emsp;Bot info
-        <div class="pull-right" data-balloon="These features are rate limited by the library. Use them sparingly!" data-balloon-pos="right">
-          <span class="glyphicon glyphicon glyphicon-question-sign"></span>
-        </div>
       </div>
-        <div class="panel-body" id="settingPanel" style="display:none;">
+        <div class="panel-body workpanel" id="settingPanel">
           <input type="text" class="form-control" placeholder="Username" name="botname" id="botname">
           <br>
-          <input type="file" id="botPic" class="form-control" disabled>
+          <input type="text" id="botPic" class="form-control" placeholder="Image path">
           <br>
           <select class="form-control" id="botstatus">
             <option value="online">Online</option>
@@ -80,16 +79,70 @@
       </div>
       <div class="panel panel-default">
         <div class="panel-heading">
+          <span class="glyphicon glyphicon glyphicon-home"></span>
+          &emsp;Guild data
+          <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#gdataPanel" style="display:none;"></span>
+        </div>
+        <div class="panel-body workpanel" id="gdataPanel">
+          <select id="gd-server" class="form-control">
+              <option value="" selected disabled>Server</option>
+          </select>
+          <br>
+          <select id="gd-channel" class="form-control">
+              <option value="" selected disabled>Channel</option>
+          </select>
+          <br>
+          <input type="text" class="form-control" placeholder="Nickname" id="botnick">
+          <br>
+          <div class="btn-group btn-group-justified">
+            <button type="button" class="btn btn-default" id="start-typing">Start typing</button>
+            <button type="button" class="btn btn-default" id="stop-typing">Stop typing</button>
+          </div>
+          <br>
+          <button type="button" class="btn btn-default btn-block" id="gd-setSettings">Save changes</button>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon glyphicon-list-alt"></span>
+          &emsp;Stats
+          <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#statsPanel" style="display:none;"></span>
+        </div>
+        <div class="panel-body workpanel" id="statsPanel">
+          <div class="input-group btn-block">
+            <span class="input-group-addon tabled">Servers</span>
+            <input type="text" class="form-control" placeholder="..." readonly id="server-count">
+          </div>
+          <br>
+          <div class="input-group btn-block">
+            <span class="input-group-addon tabled">Channels</span>
+            <input type="text" class="form-control" placeholder="..." readonly id="channel-count">
+          </div>
+          <br>
+          <div class="input-group btn-block">
+            <span class="input-group-addon tabled">Users</span>
+            <input type="text" class="form-control" placeholder="..." readonly id="user-count">
+          </div>
+          <br>
+          <div class="input-group btn-block">
+            <span class="input-group-addon tabled">Ping</span>
+            <input type="text" class="form-control" placeholder="..." readonly id="client-ping">
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
           <span class="glyphicon glyphicon glyphicon-cloud-upload"></span>
           &emsp;Invite bot to a server
           <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#invitePanel" style="display:none;"></span>
         </div>
-        <div class="panel-body" id="invitePanel" style="display:none;">
+        <div class="panel-body workpanel" id="invitePanel">
           <input type="text" class="form-control" placeholder="Bot id" name="botid" id="botid">
           <br>
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Perms (optional)" name="perms" id="perms">
-            <span class="input-group-addon" id="redirPerms" data-balloon="Permission calculator" data-balloon-pos="right">
+            <span class="input-group-addon pointer" id="redirPerms" data-balloon="Permission calculator" data-balloon-pos="right">
               <span class="glyphicon glyphicon glyphicon-link"></span>
             </span>
           </div>
@@ -99,15 +152,28 @@
           <button type="button" class="btn btn-default btn-block" id="inviteLink">Copy invite link</button>
         </div>
       </div>
-      <div class="panel panel-default" id="changelog-data">
+
+      <div class="panel panel-default">
         <div class="panel-heading">
-          <span class="glyphicon glyphicon glyphicon-list-alt"></span>
-          &emsp;Changelog
+          <span class="glyphicon glyphicon glyphicon-cog"></span>
+          &emsp;Settings
+          <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#settingsPanel" style="display:none;"></span>
+        </div>
+        <div class="panel-body workpanel" id="settingsPanel">
+          <div class="input-group btn-block">
+            <span class="input-group-addon tabled">Prefix</span>
+            <input type="" class="form-control" id="commandPrefix" name="">
+          </div>
+          <br>
+          <div class="input-group btn-block">
+            <span class="input-group-addon tabled">Ping rate</span>
+            <input type="" class="form-control" placeholder="(seconds)" id="pingRate" name="">
+          </div>
         </div>
       </div>
 
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-8 noleft">
       <div class="clearfix">
           <span class="tokenContainer">
             <input type="text" class="form-control tokenInp pull-left" placeholder="Bot token" name="token" id="token">
@@ -123,22 +189,34 @@
           <span class="glyphicon glyphicon-envelope"></span>
           &emsp;Send a message
           <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#messagePanel" style="display:none;"></span>
-          <!--<span class="label label-warning pull-right">Updated!</span>-->
         </div>
-        <div class="panel-body" id="messagePanel" style="display:none;">
+        <div class="panel-body workpanel" id="messagePanel">
           <select class="form-control" id="message-to">
-            <option value="1">Channel</option>
-            <option value="2">User</option>
+            <option value="1">Channel message</option>
+            <option value="2">Direct message</option>
           </select>
           <br>
           <div class="message-type" id="m-type1">
+            <!--
             <input type="text" class="form-control" placeholder="Server name" name="server" id="server">
+            -->
+            <select id="server" class="form-control">
+                <option value="" selected disabled>Server</option>
+            </select>
             <br>
-            <input type="text" class="form-control" placeholder="Channel name" name="channel" id="channel">
+            <select id="channel" class="form-control">
+                <option value="" selected disabled>Channel</option>
+            </select>
+            <!--
+            <input type="text" class="form-control" placeholder="Channel name" name="channel" id="channel">-->
             <br>
           </div>
           <div class="message-type" id="m-type2">
-            <input type="text" class="form-control" placeholder="User id" name="dmid" id="dmid">
+            <!--
+            <input type="text" class="form-control" placeholder="User id" name="dmid" id="dmid">-->
+            <select id="dmid" class="form-control">
+                <option value="" selected disabled>User</option>
+            </select>
             <br>
           </div>
           <textarea class="form-control richArea" id="msg" placeholder="Message"></textarea>
@@ -179,60 +257,94 @@
           <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#presetPanel" style="display:none;"></span>
           <!--<span class="label label-danger pull-right">New!</span>-->
         </div>
-        <div class="panel-body" id="presetPanel" style="display:none;">
+        <div class="panel-body workpanel" id="presetPanel">
           <div id="presetcontainer"></div>
-          <button class="btn btn-block" id="addpreset">Add new preset</button>
+
+          <div class="col-xs-8 rpad2">
+            <select class="form-control" id="preset-tt">
+              <option value="1">Channel</option>
+              <option value="0">User</option>
+            </select>
+          </div>
+          <div class="col-xs-4 nopadding">
+            <button class="btn btn-block btn-default" id="addpreset">Add new preset</button>
+          </div>
         </div>
       </div>
-      <!---
+
+
+      <!--WIP-->
+
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <span class="glyphicon glyphicon-exclamation-sign"></span>
-          &emsp;Events
-          <span class="label label-warning pull-right">wip</span>
+          <span class="glyphicon glyphicon-headphones"></span>
+          &emsp;Voice playback
+          <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#djPanel" style="display:none;"></span>
+          <!--<span class="label label-danger pull-right">New!</span>-->
         </div>
-        <div class="panel-body" id="eventPanel" style="display:none;">
-          <div id="eventcontainer"></div>
-
-
-
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">On message</h3>
-            </div>
-            <textarea class="panel-body form-control panel-area" rows="5" id="onMsg"></textarea>
+        <div class="panel-body workpanel" id="djPanel">
+          <div class="col-xs-4 rpad2">
+            <select id="v-server" class="form-control">
+                <option value="" selected disabled>Server</option>
+            </select>
           </div>
-
-
-
-
-
-          <button class="btn btn-block" id="addevent">Add new event</button>-
-          <div class="panel panel-info">
-            <div class="panel-heading">Event log</div>
-            <div class="panel-body" id="event-log">
-              <div class="alert alert-warning" role="alert">
-                This is a warning alert—check it out!
-              </div>
-              <div class="alert alert-warning" role="alert">
-                This is a warning alert—check it out!
-              </div>
-              <div class="alert alert-warning" role="alert">
-                This is a warning alert—check it out!
-              </div>
-              <div class="alert alert-warning" role="alert">
-                This is a warning alert—check it out!
-              </div>
-            </div>
+          <div class="col-xs-4 rpad2">
+            <select id="v-channel" class="form-control">
+                <option value="" selected disabled>Channel</option>
+            </select>
+          </div>
+          <div class="col-xs-2 rpad2">
+            <button class="btn btn-block btn-primary" id="v-join">Join</button>
+          </div>
+          <div class="col-xs-2 nopadding">
+            <button class="btn btn-block btn-warning" id="v-leave">Leave</button>
+          </div>
+          <div class="col-xs-6 rpad2 paddingtop">
+            <input type="text" class="form-control" id="v-file" placeholder="File location">
+          </div>
+          <div class="col-xs-2 rpad2 paddingtop">
+            <button class="btn btn-block btn-primary" id="v-save">Save</button>
+          </div>
+          <div class="col-xs-2 rpad2 paddingtop">
+            <button class="btn btn-block btn-success" id="v-play">Play</button>
+          </div>
+          <div class="col-xs-2 nopadding paddingtop">
+            <button class="btn btn-block btn-danger" id="v-stop">Stop</button>
           </div>
         </div>
       </div>
--->
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-bullhorn"></span>
+          &emsp;Soundboard
+          <span class="glyphicon glyphicon-chevron-up drp-button pull-right" data-droptarget="#soundboardPanel" style="display:none;"></span>
+        </div>
+        <div class="panel-body workpanel" id="soundboardPanel">
+          <div id="sb-container"></div>
+          <button type="button" class="btn btn-block" id="create-sound-sb">Create a sound</button>
+        </div>
+      </div>
 
+      <div class="panel panel-default">
+        <div class="panel-heading">DM feed</div>
+        <div class="panel-body" id="dmfeed">
+
+        </div>
+      </div>
 
       <div class="panel panel-default panel-console">
         <div class="panel-body" id="consoleoutput"></div>
       </div>
+
+      <!--TEST AREA-->
+      <!--
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          Preset name?
+          <span class="glyphicon glyphicon glyphicon-remove pull-right"></span>
+        </div>
+        <div class="panel-body">Panel Content</div>
+      </div>-->
 
 
     </div>
@@ -288,58 +400,7 @@
     </div>
     <div class="closebg" id="closecodebg"></div>
   </div>
-  <div id="changelogprompt" style="display:none;" data-prompt="changeloginfo">
-    <div class="well prompt">
-      <div class="changelogdiv">
-        <h4>0.0.11 Changelog:</h4>
-          <hr>
-          <ul>
-            <li>Added the ability to message users (You can only save presets for server messages for now. Next version will have support for DM preset saving and viewing DM replies)</li>
-            <li>Added multiline code picker prompt (Sending saved multiline code from presets will remove syntax highlighting)</li>
-            <li>Added new modular collapsible system</li>
-            <li>Moved footer credits to the About tab</li>
-            <li>Moved changelog side panel to it's own prompt for easier reading</li>
-            <li>TAB key now inserts an indent in the text area</li>
-            <li>Prompt values now reset when prompts are closed</li>
-            <li>Logging improvements</li>
-            <li>Code adjustments/optimizations</li>
-            <li>Quite a few CSS/HTML adjustments</li>
-          </ul> 
-      </div>
-      <span class="glyphicon glyphicon glyphicon-remove-sign dismissprompt" id="dismisschangelogprompt"></span>
-    </div>
-    <div class="closebg" id="closechangelogbg"></div>
-  </div>
-  <div id="aboutprompt" style="display:none;" data-prompt="aboutinfo">
-    <div class="well prompt">
-      <div class="aboutdiv">
-        &#169; slydoge, Bot Toolkit v0.0.11
-        <br>
-        <br>
-        Powered by <a href="https://nodejs.org/en/" class="text-a">Node.js</a>, 
-        <a href="https://electron.atom.io/" class="text-a">Electron</a>, 
-        <a href="https://discord.js.org/" class="text-a">Discord.js</a>, 
-        <a href="http://getbootstrap.com/" class="text-a">Bootstrap</a> and 
-        <a href="https://kazzkiq.github.io/balloon.css/" class="text-a">Balloon.css</a>
-        <hr>
-        Special thanks to alpha testers:
-        <br>
-        <br>
-        <ul>
-          <li>PiTiKi</li>
-          <li>K4oS</li>
-        </ul>
-        <hr>
-        <a data-balloon="Trello" data-balloon-pos="up" href="https://trello.com/b/nLa0eXAJ/discordjs-bot-toolkit"><img src="./img/trello.png" width="32px" height="32px"></a>
-        <a data-balloon="Discord" data-balloon-pos="up" href="https://discord.gg/Scd2Gtw"><img src="./img/discord.png" width="32px" height="32px"></a>
-        <a data-balloon="Github" data-balloon-pos="up" href="https://github.com/maestr0d/bot-toolkit-djs"><img src="./img/github.svg" width="32px" height="32px"></a>
-      </div>
-      <span class="glyphicon glyphicon glyphicon-remove-sign dismissprompt" id="dismissaboutprompt"></span>
-    </div>
-    <div class="closebg" id="closeaboutbg"></div>
-  </div>
-
-  <!--<div class="footer"></div>-->
+  <script src="text.js"></script>
   <script src="default.js"></script>
 </body>
 </html>
