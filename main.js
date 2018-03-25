@@ -46,7 +46,7 @@ const client = new Discord.Client();
 
 client.on('ready', () => {
   console.log('Ready!');
-  //console.log(client);
+  console.log(client);
 });
 client.on('disconnect', () => {
   console.log('Logged out!');
